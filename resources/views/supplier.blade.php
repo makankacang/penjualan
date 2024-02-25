@@ -9,7 +9,6 @@
             <div class="bg-secondary rounded h-100 p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h6 class="mb-0">Supplier Table</h6>
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addSupplierModal">Add Supplier</button>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
@@ -26,11 +25,11 @@
                             @foreach($suppliers as $data)
                             <tr>
                               <td>{{ $loop->iteration }}</td>
-                              <form action="/editsupplier/{{ $data->supplier_id }}" method="POST">
+                              <form action="/editsupplier/{{ $data->id }}" method="POST">
                                   @csrf
                                   <td>
-                                      <span class="table-data">{{ $data->nama }}</span>
-                                      <input type="text" name="nama" class="form-control edit-input" value="{{ $data->nama }}" style="display: none;">
+                                      <span class="table-data">{{ $data->name }}</span>
+                                      <input type="text" name="name" class="form-control edit-input" value="{{ $data->name }}" style="display: none;">
                                   </td>
                                   <td>
                                       <span class="table-data">{{ $data->telp }}</span>
@@ -56,7 +55,7 @@
                                       </button>
                                       <div class="btn-group" style="display: none;">
                                           <p class="text-white mb-0">Are you sure?</p>
-                                          <a href="/deletesupplier/{{ $data->supplier_id }}" class="btn text-success confirm-delete-btn">
+                                          <a href="/deletesupplier/{{ $data->id }}" class="btn text-success confirm-delete-btn">
                                               <i class="bi bi-check"></i>
                                           </a>
                                           <button class="btn text-danger cancel-delete-btn"><i class="bi bi-x"></i></button>
@@ -73,39 +72,6 @@
     </div>
   </div>
   <!-- Supplier Table End -->
-
-<!-- Add Supplier Modal -->
-<div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-secondary text-light">
-          <div class="modal-header border-0">
-              <h5 class="modal-title" id="addSupplierModalLabel">Add New Supplier</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <!-- Add your form for adding a new entry to the "supplier" table here -->
-              <form action="/addsupplier" method="POST">
-                @csrf
-                  <div class="mb-3">
-                      <label for="nama" class="form-label">Nama</label>
-                      <input type="text" class="form-control bg-dark text-light" id="nama" name="nama">
-                  </div>
-                  <div class="mb-3">
-                    <label for="telp" class="form-label">Telepon</label>
-                    <input type="text" class="form-control bg-dark text-light" id="telp" name="telp" placeholder="Format: 123-456-7890" maxlength="12">
-                    <small class="text-muted">Format: 123-456-7890</small>
-                    </div>
-                  <div class="mb-3">
-                      <label for="alamat" class="form-label">Alamat</label>
-                      <input type="text" class="form-control bg-dark text-light" id="alamat" name="alamat">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-          </div>
-      </div>
-  </div>
-</div>
-<!-- End Add Supplier Modal -->
 
 <script>
     document.querySelectorAll('.edit-btn').forEach((button) => {

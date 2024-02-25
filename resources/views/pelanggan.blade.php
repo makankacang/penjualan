@@ -2,14 +2,13 @@
 
 @section('content')
 <div class="content">
-  <!-- Sale & Revenue Start -->
+  <!-- Pelanggan Start -->
   <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-secondary rounded h-100 p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h6 class="mb-0">Pelanggan Table</h6>
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addPelangganModal">Add Pelanggan</button>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
@@ -24,14 +23,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($pelanggan as $data)
+                            @foreach($users as $data)
+                            @if($data->level == 'user')
                             <tr>
                               <td>{{ $loop->iteration }}</td>
-                              <form action="/editpelanggan/{{ $data->pelanggan_id }}" method="POST">
+                              <form action="/editpelanggan/{{ $data->id }}" method="POST">
                                   @csrf
                                   <td>
-                                      <span class="table-data">{{ $data->nama }}</span>
-                                      <input type="text" name="nama" class="form-control edit-input" value="{{ $data->nama }}" style="display: none;">
+                                      <span class="table-data">{{ $data->name }}</span>
+                                      <input type="text" name="name" class="form-control edit-input" value="{{ $data->name }}" style="display: none;">
                                   </td>
                                   <td>
                                     <span class="table-data badge {{ $data->jenis_kelamin == 'L' ? 'bg-primary' : 'bg-light' }}">{{ $data->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</span>
@@ -70,14 +70,15 @@
                                       </button>
                                       <div class="btn-group" style="display: none;">
                                           <p class="text-white mb-0">Are you sure?</p>
-                                          <a href="/deletebuku/{{ $data->pelanggan_id }}" class="btn text-success confirm-delete-btn">
+                                          <a href="/deletepelanggan/{{ $data->id }}" class="btn text-success confirm-delete-btn">
                                               <i class="bi bi-check"></i>
                                           </a>
                                           <button class="btn text-danger cancel-delete-btn"><i class="bi bi-x"></i></button>
                                       </div>
                                   </td>
                               
-                            </tr>                          
+                            </tr>    
+                            @endif
                             @endforeach
                         </tbody>
                     </table>
@@ -88,51 +89,7 @@
   </div>
 
 
-<!-- Sale & Revenue End -->
-
-<!-- Add Pelanggan Modal -->
-<div class="modal fade" id="addPelangganModal" tabindex="-1" aria-labelledby="addPelangganModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-secondary text-light">
-          <div class="modal-header border-0">
-              <h5 class="modal-title" id="addPelangganModalLabel">Add New Pelanggan</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <!-- Add your form for adding a new entry to the "pelanggan" table here -->
-              <form action="/addpelanggan" method="POST">
-                @csrf
-                  <div class="mb-3">
-                      <label for="nama" class="form-label">Nama</label>
-                      <input type="text" class="form-control bg-dark text-light" id="nama" name="nama">
-                  </div>
-                  <div class="mb-3">
-                      <label class="form-label">Jenis Kelamin</label><br>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="jenis_kelamin" id="jk_l" value="L">
-                        <label class="form-check-label" for="jk_l">Laki-laki</label>
-                      </div>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="jenis_kelamin" id="jk_p" value="P">
-                        <label class="form-check-label" for="jk_p">Perempuan</label>
-                      </div>
-                  </div>
-                  <div class="mb-3">
-                      <label for="telp" class="form-label">Telepon</label>
-                      <input type="text" class="form-control bg-dark text-light" id="telp" name="telp" placeholder="Format: 123-456-7890" maxlength="12">
-                      <small class="text-muted">Format: 123-456-7890</small>
-                  </div>
-                  <div class="mb-3">
-                      <label for="alamat" class="form-label">Alamat</label>
-                      <input type="text" class="form-control bg-dark text-light" id="alamat" name="alamat">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-          </div>
-      </div>
-  </div>
-</div>
-<!-- End Add Pelanggan Modal -->
+<!-- Pelanggan End -->
 
 <script>
     // JavaScript to validate the telephone input field

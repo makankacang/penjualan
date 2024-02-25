@@ -22,10 +22,15 @@ class Barang extends Model
     protected $primaryKey = 'id';
 
     // Fillable attributes if you're using mass assignment
-    protected $fillable = ['kode_barang', 'nama_barang', 'harga', 'stok', 'supplier_id'];
+    protected $fillable = ['kode_barang', 'nama_barang', 'harga', 'stok', 'supplier_id', 'kategori', 'deskripsi', 'image'];
 
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function transaksiDetails()
+    {
+        return $this->hasMany(TransaksiDetail::class);
     }
 }

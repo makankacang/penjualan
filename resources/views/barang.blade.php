@@ -20,54 +20,75 @@
                                 <th scope="col">Harga</th>
                                 <th scope="col">Stok</th>
                                 <th scope="col">Supplier ID</th>
+                                <th scope="col">Kategori</th> <!-- Added column for Kategori -->
+                                <th scope="col">Deskripsi</th> <!-- Added column for Deskripsi -->
+                                <th scope="col">Gambar</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($barang as $data)
                             <tr>
-                              <td>{{ $loop->iteration }}</td>
-                              <form action="/editbarang/{{ $data->id }}" method="POST">
-                                  @csrf
-                                  <td>
-                                      <span class="table-data">{{ $data->nama_barang }}</span>
-                                      <input type="text" name="nama_barang" class="form-control edit-input" value="{{ $data->nama_barang }}" style="display: none;">
-                                  </td>
-                                  <td>
-                                    <span class="table-data">Rp {{ number_format($data->harga, 0, ',', '.') }}</span>
-                                    <input type="text" name="harga" class="form-control edit-input" value="{{ $data->harga }}" style="display: none;">
+                                <td>{{ $loop->iteration }}</td>
+                                <form action="/editbarang/{{ $data->id }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <td>
+                                        <span class="table-data">{{ $data->nama_barang }}</span>
+                                        <input type="text" name="nama_barang" class="form-control edit-input" value="{{ $data->nama_barang }}" style="display: none;">
+                                    </td>
+                                    <td>
+                                        <span class="table-data">Rp {{ number_format($data->harga, 0, ',', '.') }}</span>
+                                        <input type="text" name="harga" class="form-control edit-input" value="{{ $data->harga }}" style="display: none;">
                                     </td>                                
-                                  <td>
-                                      <span class="table-data">{{ $data->stok }}</span>
-                                      <input type="number" name="stok" class="form-control edit-input" value="{{ $data->stok }}" style="display: none;">
-                                  </td>
-                                  <td>
-                                      <span class="table-data">{{ $data->supplier_id }}</span>
-                                      <input type="number" name="supplier_id" class="form-control edit-input" value="{{ $data->supplier_id }}" style="display: none;">
-                                  </td>
-                                  <td>
-                                      <button type="submit" class="btn text-success save-btn" style="display: none;">
-                                    </form>
-                                          <i class="bi bi-check"></i>
-                                      </button>
-                                      <button class="btn text-danger cancel-btn" style="display: none;">
-                                          <i class="bi bi-x"></i>
-                                      </button>
-                                      <button class="btn text-white edit-btn">
-                                          <i class="bi bi-pencil"></i>
-                                      </button>
-                                      <button class="btn text-danger delete-btn">
-                                          <i class="bi bi-trash"></i>
-                                      </button>
-                                      <div class="btn-group" style="display: none;">
-                                          <p class="text-white mb-0">Are you sure?</p>
-                                          <a href="/deletebarang/{{ $data->id }}" class="btn text-success confirm-delete-btn">
-                                              <i class="bi bi-check"></i>
-                                          </a>
-                                          <button class="btn text-danger cancel-delete-btn"><i class="bi bi-x"></i></button>
-                                      </div>
-                                  </td>
-                            
+                                    <td>
+                                        <span class="table-data">{{ $data->stok }}</span>
+                                        <input type="number" name="stok" class="form-control edit-input" value="{{ $data->stok }}" style="display: none;">
+                                    </td>
+                                    <td>
+                                        <span class="table-data">{{ $data->supplier_id }}</span>
+                                        <input type="number" name="supplier_id" class="form-control edit-input" value="{{ $data->supplier_id }}" style="display: none;">
+                                    </td>
+                                    <td>
+                                        <span class="table-data">{{ $data->kategori }}</span>
+                                        <input type="text" name="kategori" class="form-control edit-input" value="{{ $data->kategori }}" style="display: none;">
+                                    </td>
+                                    <td>
+                                        <span class="table-data">{{ $data->deskripsi }}</span>
+                                        <input type="text" name="deskripsi" class="form-control edit-input" value="{{ $data->deskripsi }}" style="display: none;">
+                                    </td>
+                                    <td class="image-cell">
+                                        <!-- Display the image if available -->
+                                        @if($data->image)
+                                            <img src="{{ url('../img/' . $data->image) }}" alt="{{ $data->image }}" width="45">
+                                        @endif
+                                        <!-- Input field for editing the image -->
+                                        <div class="input-group">
+                                            <input type="file" class="form-control bg-dark text-light edit-input" id="image{{ $loop->index }}" name="image" onchange="previewImage(event, {{ $loop->index }})" style="display: none;">
+                                            <img id="imagePreview{{ $loop->index }}" src="#" alt="Image Preview" style="max-width: 100px; max-height: 100px; margin-left: 10px; display: none;">
+                                        </div>
+                                    </td>                                
+                                    <td>
+                                        <button type="submit" class="btn text-success save-btn" style="display: none;">
+                                        </form>
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="btn text-danger cancel-btn" style="display: none;">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                        <button class="btn text-white edit-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn text-danger delete-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                        <div class="btn-group" style="display: none;">
+                                            <p class="text-white mb-0">Are you sure?</p>
+                                            <a href="/deletebarang/{{ $data->id }}" class="btn text-success confirm-delete-btn">
+                                                <i class="bi bi-check"></i>
+                                            </a>
+                                            <button class="btn text-danger cancel-delete-btn"><i class="bi bi-x"></i></button>
+                                        </div>
+                                    </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -88,29 +109,63 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/addbarang" method="POST">
+                <form action="/addbarang" method="POST" enctype="multipart/form-data">
                     @csrf
                     <!-- Hidden input for kode_barang -->
                     <input type="hidden" id="kode_barang" name="kode_barang">
-                    <div class="mb-3">
-                        <label for="nama_barang" class="form-label">Nama Barang</label>
-                        <input type="text" class="form-control bg-dark text-light" id="nama_barang" name="nama_barang">
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nama_barang" class="form-label">Nama Barang</label>
+                                <input type="text" class="form-control bg-dark text-light" id="nama_barang" name="nama_barang">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="harga" class="form-label">Harga</label>
+                                <input type="text" class="form-control bg-dark text-light" id="harga" name="harga" placeholder="Format: Rp 100,000">
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="harga" class="form-label">Harga</label>
-                        <input type="text" class="form-control bg-dark text-light" id="harga" name="harga" placeholder="Format: Rp 100,000">
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="stok" class="form-label">Stok</label>
+                                <input type="number" class="form-control bg-dark text-light" id="stok" name="stok">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="kategori" class="form-label">Kategori</label>
+                                <input type="text" class="form-control bg-dark text-light" id="kategori" name="kategori">
+                            </div>
+                        </div>
                     </div>
+                    
                     <div class="mb-3">
-                        <label for="stok" class="form-label">Stok</label>
-                        <input type="number" class="form-control bg-dark text-light" id="stok" name="stok">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <input type="text" class="form-control bg-dark text-light" id="deskripsi" name="deskripsi">
                     </div>
+                    
                     <div class="mb-3">
                         <label for="supplier_id" class="form-label">Supplier</label>
                         <div class="input-group">
                             <input type="text" class="form-control bg-dark text-light" id="supplier_id" name="supplier_id" readonly>
-                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#selectSupplierModal">Select Supplier</button>
+                            <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#selectSupplierModal">Select Supplier</button>
                         </div>
                     </div>
+                    
+                    <!-- Image input with preview -->
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image</label>
+                        <div class="input-group">
+                            <input type="file" class="form-control bg-dark btn-primary text-light" id="imageAdd" name="image" onchange="previewImageAdd(event)">
+                            <img id="imagePreviewAdd" src="#" alt="Image Preview" style="max-width: 100px; max-height: 100px; margin-left: 10px; display: none;">
+                        </div>
+                    </div>
+                    
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -121,48 +176,49 @@
 
 
 <!-- Select Supplier Modal -->
-    <div class="modal fade" id="selectSupplierModal" tabindex="-1" aria-labelledby="selectSupplierModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-secondary text-light">
-        <div class="modal-header border-0">
-          <h5 class="modal-title" id="selectSupplierModalLabel">Select Supplier</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="selectSupplierModal" tabindex="-1" aria-labelledby="selectSupplierModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" data-bs-backdrop="false">
+        <div class="modal-content bg-secondary text-light">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="selectSupplierModalLabel">Select Supplier</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Supplier ID</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Telepon</th>
+                            <th scope="col">Alamat</th>
+                            <th scope="col">Action</th> <!-- Add Action column for selecting supplier -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($suppliers as $supplier)
+                        <tr>
+                            <td>{{ $supplier->id }}</td>
+                            <td>{{ $supplier->name }}</td>
+                            <td>{{ $supplier->telp }}</td>
+                            <td>{{ $supplier->alamat }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary select-supplier-btn" onclick="selectSupplier('{{ $supplier->id }}')">Select</button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="modal-body">
-            <table class="table table-dark table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Supplier ID</th>
-                        <th scope="col">Nama</th>
-                        <th scope="col">Telepon</th>
-                        <th scope="col">Alamat</th>
-                        <th scope="col">Action</th> <!-- Add Action column for selecting supplier -->
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($suppliers as $supplier)
-                    <tr>
-                        <td>{{ $supplier->supplier_id }}</td>
-                        <td>{{ $supplier->nama }}</td>
-                        <td>{{ $supplier->telp }}</td>
-                        <td>{{ $supplier->alamat }}</td>
-                        <td>
-                            <button type="button" class="btn btn-primary select-supplier-btn" onclick="selectSupplier('{{ $supplier->supplier_id }}')">Select</button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>        
-      </div>
     </div>
-  </div>
-  <!-- End Select Supplier Modal -->
+</div>
+<!-- End Select Supplier Modal -->
+
   
   
 
 <script>
-    document.querySelectorAll('.edit-btn').forEach((button) => {
+document.querySelectorAll('.edit-btn').forEach((button) => {
     button.addEventListener('click', () => {
         const row = button.closest('tr');
         const tableData = row.querySelectorAll('.table-data');
@@ -175,8 +231,14 @@
 
         tableData.forEach((data, index) => {
             data.style.display = 'none';
-            inputFields[index].style.display = 'inline-block'; // This line should ensure input fields are displayed
+            inputFields[index].style.display = 'inline-block'; // Display input fields
         });
+
+        // Display image input field if available
+        const imageCell = row.querySelector('.image-cell');
+        const imageInput = imageCell.querySelector('.edit-input');
+        imageCell.style.display = 'table-cell'; // Display image cell
+        imageInput.style.display = 'inline-block'; // Display image input
 
         saveButton.style.display = 'inline-block';
         cancelButton.style.display = 'inline-block';
@@ -186,30 +248,39 @@
     });
 });
 
+document.querySelectorAll('.cancel-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+        const row = button.closest('tr');
+        const tableData = row.querySelectorAll('.table-data');
+        const inputFields = row.querySelectorAll('.edit-input');
+        const editButton = row.querySelector('.edit-btn');
+        const saveButton = row.querySelector('.save-btn');
+        const deleteButton = row.querySelector('.delete-btn');
+        const confirmDeleteButton = row.querySelector('.confirm-delete-btn');
+        const cancelDeleteButton = row.querySelector('.cancel-delete-btn');
 
-    document.querySelectorAll('.cancel-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-            const row = button.closest('tr');
-            const tableData = row.querySelectorAll('.table-data');
-            const inputFields = row.querySelectorAll('.edit-input');
-            const editButton = row.querySelector('.edit-btn');
-            const saveButton = row.querySelector('.save-btn');
-            const deleteButton = row.querySelector('.delete-btn');
-            const confirmDeleteButton = row.querySelector('.confirm-delete-btn');
-            const cancelDeleteButton = row.querySelector('.cancel-delete-btn');
-
-            tableData.forEach((data, index) => {
-                data.style.display = 'inline-block';
-                inputFields[index].style.display = 'none';
-            });
-
-            saveButton.style.display = 'none';
-            button.style.display = 'none';
-            editButton.style.display = 'inline-block';
-            deleteButton.style.display = 'inline-block';
-            confirmDeleteButton.parentNode.style.display = 'none'; // Hide confirm delete button group
+        tableData.forEach((data, index) => {
+            data.style.display = 'inline-block';
+            inputFields[index].style.display = 'none';
         });
+
+        // Hide the image input field
+        const imageInput = row.querySelector('input[name="image"]');
+        if (imageInput) {
+            imageInput.style.display = 'none';
+            // Reset the image preview
+            const imagePreview = row.querySelector('#imagePreview');
+            imagePreview.src = '';
+            imagePreview.style.display = 'none';
+        }
+
+        saveButton.style.display = 'none';
+        button.style.display = 'none';
+        editButton.style.display = 'inline-block';
+        deleteButton.style.display = 'inline-block';
+        confirmDeleteButton.parentNode.style.display = 'none'; // Hide confirm delete button group
     });
+});
 
     document.querySelectorAll('.delete-btn').forEach((button) => {
         button.addEventListener('click', () => {
@@ -286,6 +357,21 @@
         // Generate kode_barang when the modal is shown
         generateKodeBarang();
     });
+
+    // Function to preview image
+    function previewImage(event) {
+        const image = document.getElementById('imagePreview');
+        image.src = URL.createObjectURL(event.target.files[0]);
+        image.style.display = 'block';
+    }
+
+    // Function to preview image when adding data
+    function previewImageAdd(event) {
+        const image = document.getElementById('imagePreviewAdd');
+        image.src = URL.createObjectURL(event.target.files[0]);
+        image.style.display = 'block';
+    }
+
 </script>
 
 </div>
