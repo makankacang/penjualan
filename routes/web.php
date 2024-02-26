@@ -15,6 +15,7 @@ Route::middleware('auth')->group(function () {
         return view('home');
     });
     Route::get('/homepel', [HomeController::class, 'indexpel'])->name('homepel');
+    Route::get('/sukses', [Penjualan::class, 'sukses'])->name('sukses');
     Route::get('/getCartCount', [Penjualan::class, 'getCartCount']);
     Route::get('/shop', [Penjualan::class, 'shop'])->name('shop');
     Route::get('/detailbarang/{id}', [Penjualan::class, 'detail'])->name('detail');
@@ -25,6 +26,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/updateQuantity/{transaksiDetailId}/{newQty}', [Penjualan::class, 'updateQuantity'])->name('update-quantity');
     Route::get('/checkout', [Penjualan::class, 'showCheckoutPage'])->name('checkout');
     Route::post('/place-order', [Penjualan::class, 'placeOrder'])->name('place.order');
+    Route::post('/update-user', [Penjualan::class, 'update'])->name('updateUser');
+    Route::get('/orders', [Penjualan::class, 'order'])->name('order');
+
 
 
 

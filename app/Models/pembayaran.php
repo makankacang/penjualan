@@ -29,4 +29,10 @@ class Pembayaran extends Model
     {
         return $this->belongsTo(Transaksi::class, 'transaksi_id', 'transaksi_id');
     }
+
+    public function order()
+    {
+        return $this->hasMany(Order::class, 'pembayaran_id');
+    }
+
 }

@@ -16,30 +16,35 @@
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <h1 class="mb-4">Billing details</h1>
-                <form id="checkoutForm" action="{{ route('place.order') }}" method="POST">
-                    @csrf
                     <div class="row g-5">
                         <div class="col-md-12 col-lg-6 col-xl-7">
-                            <div class="form-item w-100">
-                                <label class="form-label my-3">Nama<sup>*</sup></label>
-                                <input type="text" class="form-control" value="{{ auth()->user()->name }}">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Alamat <sup>*</sup></label>
-                                <input type="text" class="form-control" placeholder="House Number Street Name" value="{{ auth()->user()->alamat }}">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Nomor Telepon<sup>*</sup></label>
-                                <input type="tel" class="form-control" value="{{ auth()->user()->telp }}">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Email Address<sup>*</sup></label>
-                                <input type="email" class="form-control" value="{{ auth()->user()->email }}">
-                            </div>
+                            <form id="updateUserForm">
+                                <div class="form-item w-100">
+                                    <label class="form-label my-3">Nama<sup>*</sup></label>
+                                    <input type="text" class="form-control" id="namaInput" value="{{ auth()->user()->name }}" readonly>
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label my-3">Alamat <sup>*</sup></label>
+                                    <input type="text" class="form-control" id="alamatInput" value="{{ auth()->user()->alamat }}">
+                                    <div class="row g-1 text-center align-items-start justify-content-start pt-1">
+                                        <button type="submit" class="btn border-secondary py-1 px-1 w-20 text-uppercase text-primary">Update Alamat</button>
+                                    </div>
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label my-3">Nomor Telepon<sup>*</sup></label>
+                                    <input type="text" class="form-control" id="teleponInput" value="{{ auth()->user()->telp }}" readonly>
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label my-3">Email Address<sup>*</sup></label>
+                                    <input type="email" class="form-control" id="emailInput" value="{{ auth()->user()->email }}" readonly>
+                                </div>
+
+                            </form>
                             <div class="form-item d-flex justify-content-center mt-3">
-                                <textarea id="keteranganTextarea" class="form-control border-0 border-bottom rounded col-12" placeholder="Tambah Keterangan (Pakai pita, Dll)"></textarea>
+                                <textarea id="keteranganTextarea" class="form-control border-0 border-bottom rounded col-12" placeholder="Tambah Keterangan (Pakai pita, Dll)" value="{{ $transaksi->keterangan }}"></textarea>
                             </div>
                         </div>
+                        
                         <div class="col-md-12 col-lg-6 col-xl-5">
                             <div class="table-responsive">
                                 <table class="table">
@@ -57,7 +62,7 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('img/' . $transaksiDetail->barang->image) }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                                    <img src="{{ asset('storage/img/' . $transaksiDetail->barang->image) }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                                                 </div>
                                             </td>
                                             <td>
@@ -95,6 +100,10 @@
                                 </table>
                                 
                             </div>
+                            <form id="checkoutForm" action="{{ route('place.order') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="transaksi_id" value="{{ $transaksi->transaksi_id }}" >
+                                
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
@@ -104,35 +113,37 @@
                                     <div id="bankFields" style="display: none;">
                                         <select class="form-select form-select-sm mb-3" id="bankSelect">
                                             <option selected>Select Bank</option>
-                                            <option value="Bank A">Bank A</option>
-                                            <option value="Bank B">Bank B</option>
-                                            <option value="Bank C">Bank C</option>
+                                            <option value="Bank A"><i class="fas fa-university"></i> Bank A</option>
+                                            <option value="Bank B"><i class="fas fa-university"></i> Bank B</option>
+                                            <option value="Bank C"><i class="fas fa-university"></i> Bank C</option>
                                         </select>
                                         <input type="text" class="form-control mb-3" id="nomorRekening" placeholder="Nomor Rekening">
-                                    </div>
-                                    <p class="text-start text-dark">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</p>
+                                    </div>                                    
+                                    <p class="text-start text-dark">Transfer dengan bank</p>
                                 </div>
                             </div>
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
-                                        <input type="radio" class="form-check-input bg-primary border-0" id="Delivery" name="metode" value="TUNAI">
-                                        <label class="form-check-label" for="Delivery">Cash On Delivery</label>
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="TUNAI" name="metode" value="TUNAI">
+                                        <label class="form-check-label" for="TUNAI">Cash On Delivery</label>
                                     </div>
+                                    <p class="text-start text-dark">Bayar saat barang datang</p>
                                 </div>
                             </div>
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
-                                        <input type="radio" class="form-check-input bg-primary border-0" id="EDC-1" name="metode" value="EDC">
-                                        <label class="form-check-label" for="EDC-1">EDC</label>
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="EDC" name="metode" value="EDC">
+                                        <label class="form-check-label" for="EDC">EDC</label>
                                     </div>
+                                    <p class="text-start text-dark">Bayar dengan shoope, gopay Dll</p>
                                 </div>
                             </div>
                             <div class="row g-4 text-center align-items-center justify-content-center pt-4">
                                 <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place Order</button>
                             </div>
-
+                            </form>
                                                                                    
                         </div>
                     </div>
@@ -182,6 +193,44 @@
                     console.error('Error:', error);
                 });
             }
+
+            
+    document.getElementById('updateUserForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Collect updated user data from form fields
+    var nama = document.getElementById('namaInput').value;
+    var alamat = document.getElementById('alamatInput').value;
+    var telepon = document.getElementById('teleponInput').value;
+    var email = document.getElementById('emailInput').value;
+
+    // Send AJAX request to update user data
+    fetch('/update-user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Add CSRF token if needed
+        },
+        body: JSON.stringify({
+            nama: nama,
+            alamat: alamat,
+            telepon: telepon,
+            email: email,
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('User data updated successfully.');
+            // Optionally, you can reload the page or show a success message here
+        } else {
+            console.error('Failed to update user data.');
+            // Optionally, you can show an error message here
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
         </script>       
 @endsection
 
@@ -218,5 +267,10 @@
             console.error('Error:', error);
         });
     });
+
+
+
+
+
 </script>
 @endpush

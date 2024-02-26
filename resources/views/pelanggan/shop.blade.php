@@ -180,7 +180,7 @@
                                 <a href="/detailbarang/{{ $data->id }}">
                                     <div class="rounded position-relative fruite-item">
                                         <div class="fruite-img">
-                                            <img src="{{ url('../img/' . $data->image) }}" class="img-fluid w-100 rounded-top" alt="{{ $data->nama_barang }}" width="100" height="100">
+                                            <img src="{{ asset('storage/img/' . $data->image) }}" class="img-fluid w-100 rounded-top" alt="{{ $data->nama_barang }}" width="100" height="100">
                                         </div>
                                         <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">{{ $data->kategori }}</div>
                                         <div class="p-4 border border-secondary border-top-0 rounded-bottom">

@@ -59,7 +59,7 @@
                                     <td class="image-cell">
                                         <!-- Display the image if available -->
                                         @if($data->image)
-                                            <img src="{{ url('../img/' . $data->image) }}" alt="{{ $data->image }}" width="45">
+                                        <img src="{{ asset('storage/img/' . $data->image) }}" alt="{{ $data->image }}" width="45">
                                         @endif
                                         <!-- Input field for editing the image -->
                                         <div class="input-group">

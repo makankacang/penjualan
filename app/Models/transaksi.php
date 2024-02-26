@@ -31,4 +31,10 @@ class Transaksi extends Model
     {
         return $this->hasMany(Pembayaran::class, 'transaksi_id', 'transaksi_id');
     }
+
+    public function order()
+    {
+        return $this->hasOne(Order::class, 'transaksi_id', 'transaksi_id');
+    }
+
 }

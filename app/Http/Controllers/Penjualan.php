@@ -7,6 +7,8 @@ use App\Models\barang;
 use App\Models\supplier;
 use App\Models\Pelanggan;
 use App\Models\transaksi;
+use App\Models\Order;
+use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 use App\Models\transaksidetail;
 use App\Http\Controllers\Controller;
@@ -24,6 +26,13 @@ class Penjualan extends Controller
         return view('pelanggan.shop', ['barang' => $barang]);
     }
 
+    public function sukses()
+    {
+
+        // Pass the $barang data to the view
+        return view('pelanggan.sukses');
+    }
+
     public function detail($id)
     {
         // Fetch the barang (item) from the database based on the ID
@@ -35,27 +44,30 @@ class Penjualan extends Controller
 
     public function showCart()
     {
-        // Get the transaksi for the authenticated user
-        $transaksi = Transaksi::where('pelanggan_id', auth()->id())->first();
+        // Get the transaksi for the authenticated user with status 'keranjang'
+        $transaksi = Transaksi::where('pelanggan_id', auth()->id())->where('status', 'keranjang')->first();
     
-        // Get the transaksi_detail for the transaksi
+        // Initialize other variables
         $transaksiDetails = [];
         $totalHarga = 0; // Initialize total harga
+        $ppn = 0; // Initialize PPN
+        $total = 0; // Initialize total
     
         if ($transaksi) {
-            $transaksiDetails = TransaksiDetail::where('transaksi_id', $transaksi->transaksi_id)->get();
-            
+            // Get the transaksi_detail for the transaksi
+            $transaksiDetails = $transaksi->details;
+    
             // Calculate total harga
             foreach ($transaksiDetails as $detail) {
                 $totalHarga += $detail->harga * $detail->qty;
             }
+    
+            // Calculate PPN (10% of total harga)
+            $ppn = $totalHarga * 0.1;
+    
+            // Calculate total (total harga + PPN)
+            $total = $totalHarga + $ppn;
         }
-    
-        // Calculate PPN (10% of total harga)
-        $ppn = $totalHarga * 0.1;
-    
-        // Calculate total (total harga + PPN)
-        $total = $totalHarga + $ppn;
     
         return view('pelanggan.keranjang', [
             'transaksi' => $transaksi,
@@ -65,6 +77,7 @@ class Penjualan extends Controller
             'total' => $total,
         ]);
     }
+    
     
     public function showCheckoutPage()
 {
@@ -104,8 +117,8 @@ public function addToCart(Request $request, Barang $barang) {
     // Assuming you have authentication and can get the authenticated user
     $user = Auth::user();
 
-    // Get the transaksi for the user
-    $transaksi = Transaksi::firstOrCreate(['pelanggan_id' => Auth::id()]);
+    // Get the transaksi for the user with status 'keranjang' or create a new one if it doesn't exist
+    $transaksi = Transaksi::firstOrCreate(['pelanggan_id' => Auth::id(), 'status' => 'keranjang']);
 
     // Check if the barang already exists in the transaksi details
     $existingDetail = $transaksi->details()->where('barang_id', $barang->id)->first();
@@ -128,6 +141,8 @@ public function addToCart(Request $request, Barang $barang) {
 
     return redirect()->back()->with('success', 'Item added to cart successfully!');
 }
+
+
 public function deletecart($id)
 {
 // Find the user by ID
@@ -181,26 +196,70 @@ public function updateKeterangan(Request $request)
         }
     }
 
+    public function update(Request $request)
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Update user information based on the request data
+        $user->update([
+            'nama' => $request->input('nama'),
+            'alamat' => $request->input('alamat'),
+            'telepon' => $request->input('telepon'),
+            'email' => $request->input('email'),
+            // Add more fields if needed
+        ]);
+
+        // Optionally, you can update additional fields or handle other logic here
+        
+        // Return a response
+        return response()->json(['message' => 'User updated successfully'], 200);
+    }
+
     public function placeOrder(Request $request)
     {
-        // Validate the request if needed
-
-        // Create a new transaksi entry
-        $transaksi = Transaksi::create([
-            // Add transaksi data here
+        // Validate the incoming request
+        $request->validate([
+            'metode' => 'required', // You can add more validation rules as needed
+            'transaksi_id' => 'required'
         ]);
-
-        // Create a new pembayaran entry
+    
+        // Create a new Pembayaran instance
         $pembayaran = Pembayaran::create([
-            // Add pembayaran data here
+            'waktu_bayar' => now(),
+            'total' => 0, // You need to set the total value accordingly
+            'metode' => $request->input('metode'),
+            'transaksi_id' => $request->input('transaksi_id'),
+            'no_rek' => $request->input('no_rek') // Make sure to adjust this according to your form
         ]);
-
-        // Update the transaksi status to pending
-        $transaksi->update(['status' => 'pending']);
-
-        // Return a response if needed
-        return response()->json(['message' => 'Order placed successfully']);
+    
+        // Ensure Pembayaran is properly created
+        if (!$pembayaran) {
+            return back()->with('error', 'Failed to create payment record.');
+        }
+    
+        // Create a new Order instance
+        $order = Order::create([
+            'kode_order' => uniqid(),
+            'pembayaran_id' => $pembayaran->pembayaran_id,
+            'transaksi_id' => $request->input('transaksi_id')
+        ]);
+    
+        // Update the status in the Transaksi table
+        $transaksi = Transaksi::findOrFail($request->input('transaksi_id'));
+        $transaksi->status = 'pending';
+        $transaksi->save();
+    
+        // Redirect to /sukses with a success message
+        return redirect('/sukses')->with('success', 'Order placed successfully!');
     }
+    
+    
+    
+    
+    
+    
+
 
 
 
@@ -261,7 +320,7 @@ public function updateKeterangan(Request $request)
         'supplier_id' => 'required',
         'deskripsi' => 'required',
         'kategori' => 'required',
-        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming only image files are allowed
+        'image' => 'image|mimes:jpeg,png,jpg,gif,jfif|max:2048', // Assuming only image files are allowed
     ]);
 
     try {
@@ -361,6 +420,15 @@ public function updateKeterangan(Request $request)
         $barang = barang::findOrFail($id);
         $barang->delete();
         return redirect()->route('barang')->with('success', 'Data barang berhasil dihapus');
+    }
+
+    public function order()
+    {
+        // Retrieve all orders with the pembayaran relationship loaded
+        $orders = Order::with('pembayaran')->get();
+
+        // Pass the orders data to the view
+        return view('order', compact('orders'));
     }
 
 

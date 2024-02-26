@@ -247,7 +247,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         <script src="../assets/fruitables/lib/easing/easing.min.js"></script>
         <script src="../assets/fruitables/lib/waypoints/waypoints.min.js"></script>
         <script src="../assets/fruitables/lib/lightbox/js/lightbox.min.js"></script>

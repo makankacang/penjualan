@@ -59,8 +59,7 @@
                             <a href="{{ route('pelanggan') }}" class="dropdown-item {{ request()->routeIs('pelanggan') ? 'active' : '' }}">Pelanggan</a>
                             <a href="{{ route('barang') }}" class="dropdown-item {{ request()->routeIs('barang') ? 'active' : '' }}">Barang</a>
                             <a href="{{ route('supplier') }}" class="dropdown-item {{ request()->routeIs('supplier') ? 'active' : '' }}">Supplier</a>
-                            <a href="element.html" class="dropdown-item {{ request()->routeIs('transaksi') ? 'active' : '' }}">Transaksi</a>
-                            <a href="element.html" class="dropdown-item {{ request()->routeIs('pembayaran') ? 'active' : '' }}">Pembayaran</a>
+                            <a href="{{ route('order') }}" class="dropdown-item {{ request()->routeIs('order') ? 'active' : '' }}">Order</a>
                         </div>
                     </div>
                 </div>

@@ -15,6 +15,7 @@
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <div class="table-responsive">
+
                     <table class="table">
                         <thead>
                             <tr>
@@ -31,7 +32,7 @@
                             <tr>
                                 <th scope="row">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ asset('img/' . $transaksiDetail->barang->image) }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                        <img src="{{ asset('storage/img/' . $transaksiDetail->barang->image) }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                                     </div>
                                 </th>
                                 <td>
@@ -66,7 +67,7 @@
                             </tr>
                             @endforeach
                         </tbody>
-                    </table>                                                     
+                    </table>                                                                   
                 </div>                              
                 <div class="row g-4 justify-content-end">
                     <div class="col-8"></div>
@@ -89,7 +90,7 @@
                                 <h5 class="mb-0 ps-4 me-4">Total:</h5>
                                 <p class="mb-0 pe-4">Rp. {{ number_format($total, 0, ',', '.') }}</p>
                             </div>
-                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
+                            <a href="/checkout" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">Proceed Checkout</a>
                         </div>
                     </div>
                 </div>
