@@ -40,9 +40,6 @@
                                 </div>
 
                             </form>
-                            <div class="form-item d-flex justify-content-center mt-3">
-                                <textarea id="keteranganTextarea" class="form-control border-0 border-bottom rounded col-12" placeholder="Tambah Keterangan (Pakai pita, Dll)" value="{{ $transaksi->keterangan }}"></textarea>
-                            </div>
                         </div>
                         
                         <div class="col-md-12 col-lg-6 col-xl-5">
@@ -62,7 +59,7 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('storage/img/' . $transaksiDetail->barang->image) }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                                    <img src="{{ asset('storage/img/' . $transaksiDetail->barang->image) }}" class="img-fluid me-5 rounded" style="width: 80px; height: 80px;" alt="">
                                                 </div>
                                             </td>
                                             <td>
@@ -98,16 +95,21 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                
                             </div>
+                            <div class="form-item justify-content-center mt-1">
+                                <h4>Keterangan</h4>
+                                <textarea id="keteranganTextarea" class="form-control border-1 border-bottom rounded col-md-11" placeholder="Tambah Keterangan (Pakai pita, Dll)" value="{{ $transaksi->keterangan }}"></textarea>
+                            </div>
+                            
                             <form id="checkoutForm" action="{{ route('place.order') }}" method="POST">
                                 @csrf
-                                <input type="hidden" name="transaksi_id" value="{{ $transaksi->transaksi_id }}" >
-                                
-                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+
+
+                            <div class="row g-4 text-left align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
+                                    <h4 class="text-align-left">Metode pembayaran</h4>
                                     <div class="form-check text-start my-3">
-                                        <input type="radio" class="form-check-input bg-primary border-0" id="Transfer" name="metode" value="TRANSFER">
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="Transfer" name="metode" value="TRANSFER" required>
                                         <label class="form-check-label" for="Transfer">Transfer</label>
                                     </div>
                                     <div id="bankFields" style="display: none;">
@@ -117,7 +119,7 @@
                                             <option value="Bank B"><i class="fas fa-university"></i> Bank B</option>
                                             <option value="Bank C"><i class="fas fa-university"></i> Bank C</option>
                                         </select>
-                                        <input type="text" class="form-control mb-3" id="nomorRekening" placeholder="Nomor Rekening">
+                                        <input type="text" class="form-control mb-3" name="no_rek" id="nomorRekening" placeholder="Nomor Rekening">
                                     </div>                                    
                                     <p class="text-start text-dark">Transfer dengan bank</p>
                                 </div>
@@ -125,7 +127,7 @@
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
-                                        <input type="radio" class="form-check-input bg-primary border-0" id="TUNAI" name="metode" value="TUNAI">
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="TUNAI" name="metode" value="TUNAI" required>
                                         <label class="form-check-label" for="TUNAI">Cash On Delivery</label>
                                     </div>
                                     <p class="text-start text-dark">Bayar saat barang datang</p>
@@ -134,13 +136,14 @@
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
-                                        <input type="radio" class="form-check-input bg-primary border-0" id="EDC" name="metode" value="EDC">
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="EDC" name="metode" value="EDC" required>
                                         <label class="form-check-label" for="EDC">EDC</label>
                                     </div>
                                     <p class="text-start text-dark">Bayar dengan shoope, gopay Dll</p>
                                 </div>
                             </div>
                             <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                                <input type="hidden" name="transaksi_id" value="{{ $transaksi->transaksi_id }}" >
                                 <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place Order</button>
                             </div>
                             </form>
@@ -233,44 +236,3 @@
 });
         </script>       
 @endsection
-
-@push('scripts')
-<script>
-    document.getElementById('checkoutForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        // You can add validation here if needed
-
-        // Submit the form data via AJAX
-        fetch(this.action, {
-            method: this.method,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                // Add form data to be sent to the server
-            })
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Failed to place order.');
-            }
-        })
-        .then(data => {
-            // Handle the response data
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-
-
-
-
-
-</script>
-@endpush

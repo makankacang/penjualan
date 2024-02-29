@@ -269,9 +269,12 @@ document.querySelectorAll('.cancel-btn').forEach((button) => {
         if (imageInput) {
             imageInput.style.display = 'none';
             // Reset the image preview
-            const imagePreview = row.querySelector('#imagePreview');
-            imagePreview.src = '';
-            imagePreview.style.display = 'none';
+            const imageIndex = imageInput.id.slice(-1); // Extract index from the ID of the image input
+            const imagePreview = row.querySelector(`#imagePreview${imageIndex}`);
+            if (imagePreview) {
+                imagePreview.src = '';
+                imagePreview.style.display = 'none';
+            }
         }
 
         saveButton.style.display = 'none';

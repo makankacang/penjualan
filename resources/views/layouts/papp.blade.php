@@ -21,6 +21,8 @@
         <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
         <!-- Libraries Stylesheet -->
     <link href="../assets/fruitables/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
@@ -65,7 +67,7 @@
                             <div class="navbar-nav mx-auto">
                                 <a href="{{ route('homepel') }}" class="nav-item nav-link {{ request()->routeIs('homepel') ? 'active' : '' }}">Home</a>
                                 <a href="{{ route('shop') }}" class="nav-item nav-link {{ request()->routeIs('shop') ? 'active' : '' }}">Shop</a>
-                                <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
+                                <a href="shop-detail.html" class="nav-item nav-link">Pesanan saya</a>
                                 <div class="nav-item dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                                     <div class="dropdown-menu m-0 bg-secondary rounded-0">
@@ -248,6 +250,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="../assets/fruitables/lib/easing/easing.min.js"></script>
         <script src="../assets/fruitables/lib/waypoints/waypoints.min.js"></script>
         <script src="../assets/fruitables/lib/lightbox/js/lightbox.min.js"></script>

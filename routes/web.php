@@ -21,13 +21,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/detailbarang/{id}', [Penjualan::class, 'detail'])->name('detail');
     Route::get('/keranjang', [Penjualan::class, 'showCart'])->name('cart');
     Route::post('/add-to-cart/{barang}', [Penjualan::class, 'addToCart'])->name('add-to-cart');
-    Route::get('/deletecart/{id}', [Penjualan::class, 'deletecart'])->name('deletecart');
+    Route::delete('/deletecart/{id}', [Penjualan::class, 'deletecart'])->name('deletecart');
+    Route::post('/deleteSelectedItems', [Penjualan::class, 'deleteSelectedItems'])->name('deleteSelectedItems');
     Route::post('/update-keterangan', [Penjualan::class, 'updateKeterangan'])->name('updateKeterangan');
     Route::post('/updateQuantity/{transaksiDetailId}/{newQty}', [Penjualan::class, 'updateQuantity'])->name('update-quantity');
     Route::get('/checkout', [Penjualan::class, 'showCheckoutPage'])->name('checkout');
     Route::post('/place-order', [Penjualan::class, 'placeOrder'])->name('place.order');
     Route::post('/update-user', [Penjualan::class, 'update'])->name('updateUser');
-    Route::get('/orders', [Penjualan::class, 'order'])->name('order');
+
 
 
 
@@ -46,4 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/suppliers', [Penjualan::class, 'supplier'])->name('supplier');   
     Route::post('/editsupplier/{supplier_id}', [Penjualan::class, 'editsupplier'])->name('editsupplier');
     Route::get('/deletesupplier/{supplier_id}', [Penjualan::class, 'deletesupplier'])->name('deletesupplier');
+
+    Route::get('/orders', [Penjualan::class, 'order'])->name('order');
 });

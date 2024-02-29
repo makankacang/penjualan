@@ -32,7 +32,7 @@ class Pembayaran extends Model
 
     public function order()
     {
-        return $this->hasMany(Order::class, 'pembayaran_id');
+        return $this->belongsTo(Order::class, 'pembayaran_id');
     }
 
 }

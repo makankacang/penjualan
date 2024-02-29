@@ -19,6 +19,11 @@ class TransaksiDetail extends Model
     {
         return $this->belongsTo(Transaksi::class, 'transaksi_id');
     }    
+    
+    public function order()
+    {
+        return $this->belongsTo(order::class, 'order_id');
+    }    
 
     public function barang()
     {

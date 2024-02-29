@@ -196,14 +196,13 @@
                                             <button class="btn btn-sm btn-plus rounded-circle bg-light border me-2" onclick="increaseQty(this)" data-item-id="{{ $data->id }}">
                                                 <i class="fa fa-plus"></i>
                                             </button>                                            
-                                            <form action="{{ route('add-to-cart', $data->id) }}" method="POST" class="ml-2" onsubmit="return validateQty(this)">
+                                            <form id="addToCartForm" action="{{ route('add-to-cart', $data->id) }}" method="POST" class="ml-2">
                                                 @csrf
-                                                <input type="hidden" name="qty" id="qty_input_{{ $data->id }}" value="1"> <!-- Hidden input field to store the quantity -->
-                                                <button type="submit" class="btn border border-secondary rounded-pill px-4 text-primary">
+                                                <input type="hidden" name="qty" id="qty_input_{{ $data->id }}" value="1">
+                                                <button type="button" class="btn border border-secondary rounded-pill px-4 text-primary addToCartBtn">
                                                     <i class="fa fa-cart-plus me-2 text-primary"></i>
                                                 </button>
-                                            </form>
-                                                                                                                                   
+                                            </form>                                                                                                                             
                                         </div>
                                     </div>
                                 </div>
@@ -263,6 +262,104 @@
         }
         return true;
     }
+
+// Function to show a Bootstrap toast notification with animation
+function showToast(message) {
+    const toastContainer = document.querySelector('.container-fluid'); // Select the container element where you want to append the toast
+    const toast = document.createElement('div');
+    toast.classList.add('toast');
+    toast.classList.add('show');
+    toast.classList.add('position-fixed');
+    toast.classList.add('top-1');
+    toast.classList.add('end-0');
+    toast.classList.add('m-4');
+    toast.style.opacity = '0'; // Start with opacity 0
+    toast.style.transform = 'scale(0.8)'; // Start with a smaller scale
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+
+    const toastBody = document.createElement('div');
+    toastBody.classList.add('toast-body');
+    toastBody.innerText = message;
+
+    toast.appendChild(toastBody);
+    toastContainer.appendChild(toast);
+
+    // Animate the toast
+    setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out'; // Add transition for opacity and transform
+        toast.style.opacity = '1'; // Fade in
+        toast.style.transform = 'scale(1)'; // Scale up
+        setTimeout(() => {
+            toast.style.transition = 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out'; // Add transition for opacity and transform
+            toast.style.opacity = '0'; // Fade out
+            toast.style.transform = 'scale(0.8)'; // Scale down
+            setTimeout(() => {
+                toast.remove();
+            }, 300); // Remove the toast after animation completes
+        }, 3000); // Display the toast for 3 seconds
+    }, 100); // Delay the animation to ensure it starts properly
+}
+
+
+
+
+
+    // Update the cart count badge
+    function updateCartCount() {
+        fetch('/getCartCount')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch cart count');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update the cart count badge with the fetched count
+                document.getElementById('cartCountBadge').innerText = data.count;
+            })
+            .catch(error => {
+                console.error('Error fetching cart count:', error.message);
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Listen for click events on the addToCart button
+        const addToCartButtons = document.querySelectorAll('.addToCartBtn');
+        addToCartButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const form = button.closest('form'); // Find the parent form
+                const formData = new FormData(form); // Create FormData object
+                const url = form.getAttribute('action'); // Get the form action URL
+
+                // Send an AJAX request to the server
+                fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Item added successfully, show a success message
+                        showToast(data.message);
+                        updateCartCount(); // Update the cart count badge
+                    } else {
+                        // Handle error or show error message
+                        alert('Failed to add item to cart. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    // Handle errors or show error message
+                    console.error('Error:', error);
+                    alert('An error occurred while processing your request. Please try again later.');
+                });
+            });
+        });
+    });
 </script>
 
 

@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('kode_order')->unique();
             $table->unsignedBigInteger('pembayaran_id')->nullable();
-            $table->foreign('pembayaran_id')->references('id')->on('pembayaran')->onDelete('cascade');
+            $table->foreign('pembayaran_id')->references('pembayaran_id')->on('pembayaran')->onDelete('cascade');
             $table->timestamp('waktu_bayar')->nullable();
             $table->decimal('total', 10, 2);
             $table->string('metode');
             $table->unsignedBigInteger('transaksi_id');
-            $table->foreign('transaksi_id')->references('id')->on('transaksi')->onDelete('cascade');
+            $table->foreign('transaksi_id')->references('transaksi_id')->on('transaksi')->onDelete('cascade');
             $table->string('no_rek')->nullable();
             $table->timestamp('waktu_transaksi');
             $table->text('keterangan')->nullable();
