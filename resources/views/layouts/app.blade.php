@@ -20,6 +20,8 @@
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Libraries Stylesheet -->
     <link href="../assets/darkpan/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
@@ -30,7 +32,13 @@
 
     <!-- Template Stylesheet -->
     <link href="../assets/darkpan/css/style.css" rel="stylesheet">
+    <style>
+        /* Custom background color for the card */
+        .custom-bg-color {
+            background-color: rgb(19, 19, 19)
+        }
 
+    </style>
 </head>
 <body>
     <div id="app">
@@ -52,17 +60,22 @@
                     </div>                        
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="{{ route('home') }}" class="nav-item nav-link {{ request()->routeIs('home') ? 'active' : '' }}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('pelanggan', 'barang', 'supplier', 'transaksi', 'pembayaran') ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fa fa-table me-2"></i>Table</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('pelanggan') }}" class="dropdown-item {{ request()->routeIs('pelanggan') ? 'active' : '' }}">Pelanggan</a>
-                            <a href="{{ route('barang') }}" class="dropdown-item {{ request()->routeIs('barang') ? 'active' : '' }}">Barang</a>
-                            <a href="{{ route('supplier') }}" class="dropdown-item {{ request()->routeIs('supplier') ? 'active' : '' }}">Supplier</a>
-                            <a href="{{ route('order') }}" class="dropdown-item {{ request()->routeIs('order') ? 'active' : '' }}">Order</a>
-                        </div>
-                    </div>
-                </div>
+                <a href="{{ route('home') }}" class="nav-item nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
+                    <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+                <a href="{{ route('pelanggan') }}" class="nav-item nav-link {{ request()->routeIs('pelanggan') ? 'active' : '' }}">
+                    <i class="fa fa-user me-2"></i>Pelanggan
+                </a>
+                <a href="{{ route('supplier') }}" class="nav-item nav-link {{ request()->routeIs('supplier') ? 'active' : '' }}">
+                    <i class="fa fa-id-card me-2"></i>Supplier
+                </a>
+                <a href="{{ route('barang') }}" class="nav-item nav-link {{ request()->routeIs('barang') ? 'active' : '' }}">
+                    <i class="fa fa-cubes me-2"></i>Barang
+                </a>
+                <a href="{{ route('order') }}" class="nav-item nav-link {{ request()->routeIs('order') ? 'active' : '' }}">
+                    <i class="fa fa-handshake me-2"></i>Pesanan
+                </a>
+            </div>
             </nav>
             <div class="navbar-nav px-4">
                 <a href="#" class="nav-item nav-link text-primary" data-bs-toggle="modal" data-bs-target="#logoutConfirmationModal"><i class="fa fa-sign-out-alt me-2"></i>Logout</a>
@@ -87,21 +100,7 @@
         </div>
         <!-- End Logout Confirmation Modal -->
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../assets/darkpan/lib/chart/chart.min.js"></script>
-        <script src="../assets/darkpan/lib/easing/easing.min.js"></script>
-        <script src="../assets/darkpan/lib/waypoints/waypoints.min.js"></script>
-        <script src="../assets/darkpan/lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="../assets/darkpan/lib/tempusdominus/js/moment.min.js"></script>
-        <script src="../assets/darkpan/lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="../assets/darkpan/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
-        <!-- Template Javascript -->
-        <script src="../assets/darkpan/js/main.js"></script>
-
-        <main class="py-4">
+        <main>
             @yield('content')
         </main>
     </div>
@@ -115,5 +114,19 @@
             });
         });
     </script>
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/darkpan/lib/chart/chart.min.js"></script>
+        <script src="../assets/darkpan/lib/easing/easing.min.js"></script>
+        <script src="../assets/darkpan/lib/waypoints/waypoints.min.js"></script>
+        <script src="../assets/darkpan/lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="../assets/darkpan/lib/tempusdominus/js/moment.min.js"></script>
+        <script src="../assets/darkpan/lib/tempusdominus/js/moment-timezone.min.js"></script>
+        <script src="../assets/darkpan/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+        <!-- Template Javascript -->
+        <script src="../assets/darkpan/js/main.js"></script>
 </body>
 </html>

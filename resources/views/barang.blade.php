@@ -19,7 +19,7 @@
                                 <th scope="col">Nama Barang</th>
                                 <th scope="col">Harga</th>
                                 <th scope="col">Stok</th>
-                                <th scope="col">Supplier ID</th>
+                                <th scope="col">Supplier</th>
                                 <th scope="col">Kategori</th> <!-- Added column for Kategori -->
                                 <th scope="col">Deskripsi</th> <!-- Added column for Deskripsi -->
                                 <th scope="col">Gambar</th>
@@ -45,12 +45,12 @@
                                         <input type="number" name="stok" class="form-control edit-input" value="{{ $data->stok }}" style="display: none;">
                                     </td>
                                     <td>
-                                        <span class="table-data">{{ $data->supplier_id }}</span>
+                                        <span class="table-data">{{ $data->supplier->name }}</span>
                                         <input type="number" name="supplier_id" class="form-control edit-input" value="{{ $data->supplier_id }}" style="display: none;">
                                     </td>
                                     <td>
-                                        <span class="table-data">{{ $data->kategori }}</span>
-                                        <input type="text" name="kategori" class="form-control edit-input" value="{{ $data->kategori }}" style="display: none;">
+                                        <span class="table-data">{{ $data->kategori->nama }}</span>
+                                        <input type="text" name="kategori" class="form-control edit-input" value="{{ $data->kategori->nama }}" style="display: none;">
                                     </td>
                                     <td>
                                         <span class="table-data">{{ $data->deskripsi }}</span>
@@ -139,7 +139,10 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="kategori" class="form-label">Kategori</label>
-                                <input type="text" class="form-control bg-dark text-light" id="kategori" name="kategori">
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-dark text-light" id="kategori_id" name="kategori_id" readonly>
+                                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#selectKategoriModal">Select Kategori</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,6 +176,42 @@
     </div>
 </div>
 <!-- End Add Barang Modal -->
+
+
+<!-- Select Kategori Modal -->
+<div class="modal fade" id="selectKategoriModal" tabindex="-1" aria-labelledby="selectKategoriModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" data-bs-backdrop="false">
+        <div class="modal-content bg-secondary text-light">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="selectKategoriModalLabel">Select Kategori</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Kategori ID</th>
+                            <th scope="col">Nama Kategori</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($kategoris as $kategori)
+                        <tr>
+                            <td>{{ $kategori->kategori_id }}</td>
+                            <td>{{ $kategori->nama }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary select-kategori-btn" onclick="selectKategori('{{ $kategori->kategori_id }}', '{{ $kategori->nama }}')">Select</button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Select Kategori Modal -->
 
 
 <!-- Select Supplier Modal -->
@@ -330,6 +369,18 @@ document.querySelectorAll('.cancel-btn').forEach((button) => {
         // Hide the modal
         $('#selectSupplierModal').modal('hide');
     }
+
+    // Function to handle selection of category
+    function selectKategori(kategori_id, nama) {
+        // Get the selected category ID and name
+        const kategoriId = kategori_id;
+        const kategoriNama = nama;
+        // Set the selected category ID and name to the input field
+        document.getElementById('kategori_id').value = kategoriId;
+        // Hide the modal
+        $('#selectKategoriModal').modal('hide');
+    }
+
 
     // Function to remove Rp prefix and thousand separators from harga input field
     function prepareHargaInput() {

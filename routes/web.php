@@ -20,6 +20,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/shop', [Penjualan::class, 'shop'])->name('shop');
     Route::get('/detailbarang/{id}', [Penjualan::class, 'detail'])->name('detail');
     Route::get('/keranjang', [Penjualan::class, 'showCart'])->name('cart');
+    Route::get('/pesanan-saya', [Penjualan::class, 'showpesanan'])->name('pesanan');
+    Route::delete('/cancelorder/{id}', [Penjualan::class, 'cancelOrder']);
+    Route::post('/confirmorder', [Penjualan::class, 'confirmOrder'])->name('confirmorder');
+    Route::post('/unconfirmorder', [Penjualan::class, 'unconfirmOrder'])->name('unconfirmorder');
+    Route::post('/completeorder', [Penjualan::class, 'completeOrder'])->name('completeorder');
     Route::post('/add-to-cart/{barang}', [Penjualan::class, 'addToCart'])->name('add-to-cart');
     Route::delete('/deletecart/{id}', [Penjualan::class, 'deletecart'])->name('deletecart');
     Route::post('/deleteSelectedItems', [Penjualan::class, 'deleteSelectedItems'])->name('deleteSelectedItems');

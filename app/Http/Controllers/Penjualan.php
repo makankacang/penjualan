@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Order;
 use App\Models\barang;
+use App\Models\kategori;
 use App\Models\supplier;
 use App\Models\Pelanggan;
 use App\Models\transaksi;
-use App\Models\Order;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 use App\Models\transaksidetail;
@@ -53,6 +54,70 @@ class Penjualan extends Controller
 
         // Pass the $barang data to the view
         return view('pelanggan.sukses');
+    }
+
+    public function showpesanan(Request $request)
+    {
+        // Fetch orders associated with the authenticated user
+        $user_id = auth()->id();
+        
+        // Initialize the status variable to 'pending' if not provided in the request
+        $status = $request->status ?? 'pending';
+        
+        // Filter orders by status
+        $orders = Order::whereHas('user', function ($query) use ($user_id) {
+                $query->where('id', $user_id);
+            })
+            ->whereHas('transaksi', function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->with(['user', 'pembayaran', 'transaksi.details'])
+            ->get();
+    
+        // Pass the orders data to the view
+        return view('pelanggan.pesanan', compact('orders'));
+    }
+    
+    public function cancelOrder($id)
+    {
+        try {
+            // Find the order by ID
+            $order = Order::findOrFail($id);
+
+            // Delete the order and related data
+            if ($order) {
+                // Delete the order
+                $order->delete();
+
+                // Delete related pembayaran
+                if ($order->pembayaran) {
+                    $order->pembayaran->delete();
+                }
+
+                // Delete related transaksi details
+                if ($order->transaksi && $order->transaksi->details()->exists()) {
+                    $order->transaksi->details()->delete();
+                }
+
+                // Delete related transaksi
+                if ($order->transaksi) {
+                    $order->transaksi->delete();
+                }
+
+
+
+                // Optionally, you can perform additional actions here
+
+                // Return a success response
+                return response()->json(['message' => 'Order has been cancelled successfully'], 200);
+            } else {
+                // If order not found
+                return response()->json(['error' => 'Order not found'], 404);
+            }
+        } catch (\Exception $e) {
+            // Return an error response if an exception occurs
+            return response()->json(['error' => 'Failed to cancel order: ' . $e->getMessage()], 500);
+        }
     }
 
     public function detail($id)
@@ -387,13 +452,14 @@ public function updateKeterangan(Request $request)
 
     public function barang()
     {
-        // Assuming the 'supplier' role is assigned to users who act as suppliers
+        // Fetch suppliers who have the 'supplier' level
         $suppliers = User::where('level', 'supplier')->get();
+        $kategoris = Kategori::all();
         
-        // Now fetch barang data and eager load the supplier information
-        $barang = Barang::with('supplier')->get();
+        // Fetch barang data and eager load the supplier information
+        $barang = Barang::with('supplier', 'kategori')->get();
     
-        return view('barang', compact('barang', 'suppliers'));
+        return view('barang', compact('barang', 'suppliers', 'kategoris'));
     }
     
 
@@ -406,7 +472,7 @@ public function updateKeterangan(Request $request)
         'stok' => 'required',
         'supplier_id' => 'required',
         'deskripsi' => 'required',
-        'kategori' => 'required',
+        'kategori_id' => 'required',
         'image' => 'image|mimes:jpeg,png,jpg,gif,jfif|max:2048', // Assuming only image files are allowed
     ]);
 
@@ -511,13 +577,61 @@ public function updateKeterangan(Request $request)
 
     public function order()
     {
-        // Fetch all orders with their associated user and transaction details
-        $orders = Order::with(['user','pembayaran', 'transaksi', 'transaksidetail'])->get();
-
+        // Fetch all orders with their associated user, pembayaran, transaksi, and transaksi_detail
+        $orders = Order::with(['user', 'pembayaran', 'transaksi.details'])->get();
+    
         // Pass the orders data to the view
         return view('order', compact('orders'));
     }
+    
+    
+    public function confirmOrder(Request $request)
+    {
+        // Assuming you have the order ID available in the request or session
+        $orderId = $request->input('order_id');
+        
+        // Find the order by ID and update its status to 'ordered'
+        $order = Transaksi::find($orderId);
+        if ($order) {
+            $order->status = 'ordered';
+            $order->save();
+        }
+        
+        // Redirect back or wherever appropriate
+        return redirect()->back();
+    }
 
+    public function unconfirmOrder(Request $request)
+    {
+        // Assuming you have the order ID available in the request or session
+        $orderId = $request->input('order_id');
+        
+        // Find the order by ID and update its status to 'ordered'
+        $order = Transaksi::find($orderId);
+        if ($order) {
+            $order->status = 'pending';
+            $order->save();
+        }
+        
+        // Redirect back or wherever appropriate
+        return redirect()->back();
+    }
+
+    public function completeOrder(Request $request)
+    {
+        // Assuming you have the order ID available in the request or session
+        $orderId = $request->input('order_id');
+        
+        // Find the order by ID and update its status to 'ordered'
+        $order = Transaksi::find($orderId);
+        if ($order) {
+            $order->status = 'completed';
+            $order->save();
+        }
+        
+        // Redirect back or wherever appropriate
+        return redirect()->back();
+    }
 
 
 

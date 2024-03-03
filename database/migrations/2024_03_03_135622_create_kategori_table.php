@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddBeratBersihToBarangTable extends Migration
+class CreateKategoriTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddBeratBersihToBarangTable extends Migration
      */
     public function up()
     {
-        Schema::table('barang', function (Blueprint $table) {
-            $table->decimal('berat_bersih', 8, 2)->nullable();
+        Schema::create('kategori', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,7 @@ class AddBeratBersihToBarangTable extends Migration
      */
     public function down()
     {
-        Schema::table('barang', function (Blueprint $table) {
-            $table->dropColumn('berat_bersih');
-        });
+        Schema::dropIfExists('kategori');
     }
 }
+

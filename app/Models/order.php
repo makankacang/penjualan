@@ -21,7 +21,6 @@ class Order extends Model
         'pembayaran_id',
         'transaksi_id',
         'pelanggan_id',
-        
         // Add other fillable attributes here
     ];
 
@@ -32,17 +31,12 @@ class Order extends Model
     {
         return $this->belongsTo(Transaksi::class, 'transaksi_id');
     }
-
-    public function transaksidetail()
-    {
-        return $this->hasMany(transaksidetail::class, 'transaksi_detail_id'); // Assuming 'transaksi_id' is the foreign key in the transaksiDetail table
-    }
     /**
      * Get the pembayaran associated with the order.
      */
     public function pembayaran()
     {
-        return $this->hasOne(Pembayaran::class, 'pembayaran_id'); // Assuming 'transaksi_id' is the foreign key in the pembayaran table
+        return $this->belongsTo(Pembayaran::class, 'pembayaran_id'); // Assuming 'transaksi_id' is the foreign key in the pembayaran table
     }
 
     
