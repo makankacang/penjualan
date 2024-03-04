@@ -92,7 +92,9 @@
                                                 <div class="card-body" style="max-height: 200px; overflow: hidden;">
                                                     <h5 class="card-title">{{ $transaksiDetail->barang->nama_barang }}</h5>
                                                     <p class="card-text" style="font-size: 12px;"><strong>Rp. {{ number_format($transaksiDetail->barang->harga, 0, ',', '.') }}</strong></p>
-                                                    <p class="card-text" style="font-size: 12px;"><strong>Kategori:</strong> {{ $transaksiDetail->barang->kategori }}</p>
+                                                    <p class="card-text" style="font-size: 12px;"><strong>Kategori:</strong>
+                                                         {{ $transaksiDetail->barang->kategori->nama }}
+                                                        </p>
                                                 </div>
                                             </div>
                                         </div>

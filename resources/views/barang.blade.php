@@ -50,7 +50,7 @@
                                     </td>
                                     <td>
                                         <span class="table-data">{{ $data->kategori->nama }}</span>
-                                        <input type="text" name="kategori" class="form-control edit-input" value="{{ $data->kategori->nama }}" style="display: none;">
+                                        <input type="text" name="kategori_id" class="form-control edit-input" value="{{ $data->kategori_id }}" style="display: none;">
                                     </td>
                                     <td>
                                         <span class="table-data">{{ $data->deskripsi }}</span>

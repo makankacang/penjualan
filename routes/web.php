@@ -10,10 +10,18 @@ use App\Http\Controllers\Auth\LoginController;
 Auth::routes();
 
 // Apply middleware to restrict access to the 'home' route to authenticated users only
-Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return view('home');
-    });
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/', function () {
+            if (auth()->check()) {
+                $userLevel = auth()->user()->level;
+                if ($userLevel === 'user') {
+                    return redirect()->route('homepel');
+                } elseif ($userLevel === 'admin') {
+                    return redirect()->route('home');
+                }
+            }
+            return view('home');
+        });        
     Route::get('/homepel', [HomeController::class, 'indexpel'])->name('homepel');
     Route::get('/sukses', [Penjualan::class, 'sukses'])->name('sukses');
     Route::get('/getCartCount', [Penjualan::class, 'getCartCount']);
@@ -33,14 +41,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [Penjualan::class, 'showCheckoutPage'])->name('checkout');
     Route::post('/place-order', [Penjualan::class, 'placeOrder'])->name('place.order');
     Route::post('/update-user', [Penjualan::class, 'update'])->name('updateUser');
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+    });
 
 
-
-
-
+    Route::middleware(['auth', 'checkUserRole:admin'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/pelanggan', [Penjualan::class, 'pelanggan'])->name('pelanggan');
-    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
     Route::post('/editpelanggan/{id}', [Penjualan::class, 'editpelanggan'])->name('editpelanggan');
     Route::get('/deletepelanggan/{id}', [Penjualan::class, 'deletepelanggan'])->name('deletepelanggan');
 

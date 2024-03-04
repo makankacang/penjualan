@@ -49,7 +49,8 @@
                                         <tr>
                                             <th scope="col">Products</th>
                                             <th scope="col">Name</th>
-                                            <th scope="col">Price</th>
+                                            <th scope="col">Harga</th>
+                                            <th scope="col">Kategori</th>
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Total</th>
                                         </tr>
@@ -67,6 +68,9 @@
                                             </td>
                                             <td>
                                                 <p class="mb-0 mt-4">Rp. {{ number_format($transaksiDetail->barang->harga, 0, ',', '.') }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0 mt-4">{{ $transaksiDetail->barang->kategori->nama }}</p>
                                             </td>
                                             <td>
                                                 <p class="mb-0 mt-4">{{ $transaksiDetail->qty }}</p>

@@ -500,7 +500,7 @@ public function updateKeterangan(Request $request)
         $barang->stok = $request->stok;
         $barang->supplier_id = $request->supplier_id;
         $barang->deskripsi = $request->deskripsi;
-        $barang->kategori = $request->kategori;
+        $barang->kategori_id = $request->kategori_id;
         $barang->image = $fileNameToStore; // Save the filename to the database
 
         // Save the Barang instance
@@ -524,7 +524,7 @@ public function updateKeterangan(Request $request)
             'harga' => 'required',
             'stok' => 'required',
             'supplier_id' => 'required',
-            'kategori' => 'required',
+            'kategori_id' => 'required',
             'deskripsi' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming only image files are allowed
         ]);
@@ -557,7 +557,7 @@ public function updateKeterangan(Request $request)
         $barang->harga = $request->harga;
         $barang->stok = $request->stok;
         $barang->supplier_id = $request->supplier_id;
-        $barang->kategori = $request->kategori;
+        $barang->kategori_id = $request->kategori_id;
         $barang->deskripsi = $request->deskripsi;
     
         // Save the Barang instance

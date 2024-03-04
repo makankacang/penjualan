@@ -89,7 +89,7 @@
                             <div class="navbar-nav mx-auto">
                                 <a href="{{ route('homepel') }}" class="nav-item nav-link {{ request()->routeIs('homepel') ? 'active' : '' }}">Home</a>
                                 <a href="{{ route('shop') }}" class="nav-item nav-link {{ request()->routeIs('shop') ? 'active' : '' }}">Shop</a>
-                                <a href="{{ route('pesanan') }}" class="nav-item nav-link {{ request()->routeIs('pesanan') ? 'active' : '' }}">Pesanan saya<span id="pesananCountBadge" class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: 30px; left: 710px; height: 20px; min-width: 20px;">0</span></a>
+                                <a href="{{ route('pesanan') }}" class="nav-item nav-link {{ request()->routeIs('pesanan') ? 'active' : '' }}">Pesanan saya</a>
                             </div>
                             <div class="d-flex m-3 me-0">
                                 <a href="/keranjang" class="position-relative me-4 my-auto">
